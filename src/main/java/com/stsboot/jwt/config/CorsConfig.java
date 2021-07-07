@@ -14,11 +14,11 @@ public class CorsConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("*");
+		config.addAllowedOrigin("*"); // e.g. http://domain1.com
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
-		source.registerCorsConfiguration("/api/**", config);
-		
+
+		source.registerCorsConfiguration("/jwt/api/**", config);
 		return new CorsFilter(source);
 	}
 }

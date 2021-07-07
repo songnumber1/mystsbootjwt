@@ -20,6 +20,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stsboot.jwt.auth.PrincipalDetails;
 import com.stsboot.jwt.model.User;
+import com.stsboot.jwt.properties.JwtProperties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -81,12 +82,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		// RSA방식은 아니고 Hash암호 방식이다
 		String jwtToken = JWT.create()
-				.withSubject("cos토큰")
-				.withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
-				.withClaim("id", principalDetailis.getUser().getId())
-				.withClaim("username", principalDetailis.getUser().getUsername())
-				.sign(Algorithm.HMAC512("cos"));
+				.withSubject("cos")
+				.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
+				.withClaim(JwtProperties.JWT_CLAIM_ID, principalDetailis.getUser().getId())
+				.withClaim(JwtProperties.JWT_CLAIM_USERNAME, principalDetailis.getUser().getUsername())
+				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 		
-		response.addHeader("Authorization", "Bearer " + jwtToken);
+		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 	}
 }
