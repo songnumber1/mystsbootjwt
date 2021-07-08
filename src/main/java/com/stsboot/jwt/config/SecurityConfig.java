@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		.addFilter(corsConfig.corsFilter()) // CrossOrigin(인증 x), 시큐리티 필터에 등록 인증(O)
+		.cors().configurationSource(corsConfig.corsFilter())
+		.and()
 		.formLogin().disable()
 		.httpBasic().disable()
 		.addFilter(new JwtAuthenticationFilter(authenticationManager())) // AuthenticationManager가 파라메터로 넘겨야 한다.

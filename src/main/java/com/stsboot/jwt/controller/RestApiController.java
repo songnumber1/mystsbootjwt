@@ -1,5 +1,11 @@
 package com.stsboot.jwt.controller;
 
+import java.nio.charset.Charset;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stsboot.com.response.BaseResponseMessage;
+import com.stsboot.com.response.StatusEnum;
 import com.stsboot.jwt.Repository.UserRepository;
 import com.stsboot.jwt.exception.AccountException;
 import com.stsboot.jwt.exception.AccountExceptionType;
@@ -32,6 +40,13 @@ public class RestApiController {
 	
 	@PostMapping("join")
 	public @ResponseBody String join(@RequestBody User user) {
+		if(user.getUsername() == null 
+			|| user.getUsername().isEmpty()
+			|| user.getPassword() == null 
+			|| user.getPassword().isEmpty())
+		{
+			throw new AccountException(AccountExceptionType.REUQIRED_PARAMETER_ERROR);
+		}
 		
 		User userEntity = userRepository.findByUsername(user.getUsername());
 				
@@ -44,6 +59,20 @@ public class RestApiController {
 		userRepository.save(user);
 		return "회원가입완료";
 	}
+	
+	@PostMapping("resentity")
+	public ResponseEntity<BaseResponseMessage>resentity() {
+		BaseResponseMessage message = new BaseResponseMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData("Data");
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+	}
+	
 	
 	// user, manager, admin 권한만 접근 가능
 	@PostMapping("/api/v1/user")
