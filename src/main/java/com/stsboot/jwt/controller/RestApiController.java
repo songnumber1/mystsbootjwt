@@ -1,6 +1,7 @@
 package com.stsboot.jwt.controller;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties.Value;
 import com.stsboot.com.response.BaseResponseMessage;
 import com.stsboot.com.response.StatusEnum;
+import com.stsboot.com.util.util;
 import com.stsboot.jwt.Repository.UserRepository;
 import com.stsboot.jwt.exception.AccountException;
 import com.stsboot.jwt.exception.AccountExceptionType;
@@ -39,7 +42,7 @@ public class RestApiController {
 	}
 	
 	@PostMapping("join")
-	public @ResponseBody String join(@RequestBody User user) {
+	public ResponseEntity<BaseResponseMessage> join(@RequestBody User user) {
 		if(user.getUsername() == null 
 			|| user.getUsername().isEmpty()
 			|| user.getPassword() == null 
@@ -57,11 +60,13 @@ public class RestApiController {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setRoles("ROLE_USER");
 		userRepository.save(user);
-		return "회원가입완료";
+		//return "회원가입완료";
+		
+		return CreateReponse(StatusEnum.OK, "OK", null, null);
 	}
 	
 	@PostMapping("resentity")
-	public ResponseEntity<BaseResponseMessage>resentity() {
+	public ResponseEntity<BaseResponseMessage> resentity() {
 		BaseResponseMessage message = new BaseResponseMessage();
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -71,6 +76,30 @@ public class RestApiController {
         message.setData("Data");
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
+	}
+	
+	private ResponseEntity<BaseResponseMessage> CreateReponse(StatusEnum statusEnum, String message, String data, Map<String, String> headerData) {
+		BaseResponseMessage responseMessage = new BaseResponseMessage();
+        HttpHeaders headers= new HttpHeaders();
+        
+        if(headerData != null) {
+        	headerData.forEach((key, value) -> {
+        		if(value != null)
+        			headers.add(key, value);
+        	});
+        };
+        
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        responseMessage.setStatus(statusEnum);
+        
+        if(!util.IsNullEmpty(message))
+        	responseMessage.setMessage(message);
+        
+        if(!util.IsNullEmpty(data))
+        	responseMessage.setData("Data");
+
+        return new ResponseEntity<>(responseMessage, headers, HttpStatus.OK);
 	}
 	
 	

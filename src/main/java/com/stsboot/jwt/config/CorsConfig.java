@@ -7,6 +7,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.stsboot.jwt.properties.JwtProperties;
+
 @Configuration
 public class CorsConfig {
 
@@ -20,6 +22,7 @@ public class CorsConfig {
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		config.addAllowedOriginPattern("*");
+		config.addExposedHeader(JwtProperties.HEADER_STRING);
 
 		source.registerCorsConfiguration("/**", config);
 		return source;

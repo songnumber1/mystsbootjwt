@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 			System.out.println(principalDetails.getUser().getUsername());
 			
-			// authentication객체가 session영역에 저장을 해야하고 그 방벙ㅂ이 return 해주면됨
+			// authentication객체가 session영역에 저장을 해야하고 그 방법이 return 해주면됨
 			// 리턴의 이유는 권한 관리를 sercurity가 대신 해주기 때문에 편하려고 하는거임.
 			// 굳이 JWT토큰을 사용하면서 세션을 만들 이유가 없음 . 근데 단지 권한 처리때문에 session에 저장함.
 			return authentication;
