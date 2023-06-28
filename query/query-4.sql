@@ -53,6 +53,34 @@ SELECT * FROM `system$backgroundjob`
 
 
 
+USE jwt;user
+
+SELECT * FROM USER;
+
+
+CREATE DATABASE SHEDLOCKDB
+
+
+CREATE TABLE shedlock (
+  name VARCHAR(64),
+  lock_until TIMESTAMP(3) NULL,
+  locked_at TIMESTAMP(3) NULL,
+  locked_by VARCHAR(255),
+  PRIMARY KEY (name)
+)
+
+
+SELECT * FROM shedlock;
+
+CREATE TABLE BATCH_TABLE (
+	name VARCHAR(64),
+	port VARCHAR(64),
+	exetime DATETIME DEFAULT NOW()
+)
+
+SELECT * FROM BATCH_TABLE ORDER BY exetime DESC;
+
+DELETE FROM batch_table;
 
 
 
@@ -78,3 +106,45 @@ SELECT * FROM mendixsystem$entity;
 SELECT * FROM mendixsystem$attribute;
 
 mysql
+
+
+CREATE DATABASE TESTDB;
+
+USE testdb;
+
+
+SELECT * FROM user_role;
+SELECT * FROM user;
+
+INSERT INTO user
+(
+	active,
+	email,
+	PASSWORD,
+	remark,
+	roles,
+	token,
+	username
+)
+VALUE
+(
+	1,
+	'songnumber1@naver.com',
+	'password',
+	'remark',
+	'roles',
+	'token',
+	'song min woo'
+)
+
+DELETE FROM user WHERE id = 3;
+
+
+USE JWTAUTH;
+SELECT * FROM user;
+
+
+INSERT INTO user_role (role, securityrole, roleno) VALUES ('Admin', 'ROLE_ADMIN', 0);
+INSERT INTO user_role (role, securityrole, roleno) VALUES ('Manager', 'ROLE_MANAGER', 1);
+INSERT INTO user_role (role, securityrole, roleno) VALUES ('User', 'ROLE_USER', 2);
+INSERT INTO user_role (role, securityrole, roleno) VALUES ('Guest', 'ROLE_GUEST', 3);

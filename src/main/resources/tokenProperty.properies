@@ -1,0 +1,24 @@
+jwt.claim.userid=id
+jwt.claim.username=username
+
+# ================================================================
+# Access Token
+# "0D17C30D-4971-4969-A221-295DF0771A13" 문자열 base64로 인코딩
+jwt.access.secert=ezBEMTdDMzBELTQ5NzEtNDk2OS1BMjIxLTI5NURGMDc3MUExM30
+jwt.access.subject=access_sub
+# 10분
+jwt.access.header=access_token
+jwt.access.expired=600000
+jwt.access.prefix=access_bearer 
+# ================================================================
+
+# ================================================================
+# Refresh Token
+# "3383DA7E-0E25-4871-9D4A-59EA01AC0A25" 문자열 base64로 인코딩
+jwt.refresh.secert=3383DA7E-0E25-4871-9D4A-59EA01AC0A25
+jwt.refresh.subject=refresh_sub
+# 1시간이며 일주일은 604800000이다
+jwt.refresh.header=refresh_token
+jwt.refresh.expired=3600000
+jwt.refresh.prefix=refresh_bearer 
+# ================================================================

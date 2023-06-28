@@ -8,13 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.web.filter.CorsFilter;
 
 import com.stsboot.jwt.Repository.UserRepository;
 import com.stsboot.jwt.filter.JwtAuthenticationFilter;
 import com.stsboot.jwt.filter.JwtAuthorizationFilter;
-import com.stsboot.jwt.filter.MyFilter3;
+import com.stsboot.jwt.properties.TokenProperties;
+import com.stsboot.jwt.service.TokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private final UserRepository userRepository;
+
+	@Autowired
+	private final TokenProperties tokenProperties;
+
+	@Autowired
+	private final TokenService tokenService;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -47,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.formLogin().disable()
 		.httpBasic().disable()
-		.addFilter(new JwtAuthenticationFilter(authenticationManager())) // AuthenticationManager가 파라메터로 넘겨야 한다.
-		.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository)) // AuthenticationManager가 파라메터로 넘겨야 한다.
+		.addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProperties, tokenService)) // AuthenticationManager가 파라메터로 넘겨야 한다.
+		.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, tokenProperties, tokenService)) // AuthenticationManager가 파라메터로 넘겨야 한다.
 		.authorizeRequests()
 		.antMatchers("/api/v1/user/**")
 		.access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")

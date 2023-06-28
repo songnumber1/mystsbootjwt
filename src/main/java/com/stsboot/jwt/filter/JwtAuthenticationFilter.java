@@ -1,8 +1,6 @@
 package com.stsboot.jwt.filter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,12 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stsboot.jwt.auth.PrincipalDetails;
 import com.stsboot.jwt.model.User;
-import com.stsboot.jwt.properties.JwtProperties;
+import com.stsboot.jwt.properties.TokenProperties;
+import com.stsboot.jwt.service.TokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +27,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
-	
+	private final TokenProperties tokenProperties;
+	private final TokenService tokenService;
+
 	// /lgoin 요청을 하면 로그인 시도를 위해 실행되는 함수
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -78,16 +77,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authResult) throws IOException, ServletException {
 		System.out.println("successfulAuthentication 실행됨 : 인증이완료되었습니다.");
 		
-		PrincipalDetails principalDetailis = (PrincipalDetails)authResult.getPrincipal();
+		PrincipalDetails principalDetailis = (PrincipalDetails) authResult.getPrincipal();
 		
+		String accessToken = tokenService.createAccessToken(principalDetailis.getUser());
+		String refreshToken = tokenService.createRefreshToken(principalDetailis.getUser());
+		
+		if (accessToken == null || refreshToken == null) {
+			return;
+		}
 		// RSA방식은 아니고 Hash암호 방식이다
-		String jwtToken = JWT.create()
-				.withSubject("cos")
-				.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
-				.withClaim(JwtProperties.JWT_CLAIM_ID, principalDetailis.getUser().getId())
-				.withClaim(JwtProperties.JWT_CLAIM_USERNAME, principalDetailis.getUser().getUsername())
-				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
-		
-		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+		// String jwtToken = JWT.create()
+		// 		.withSubject("cos")
+		// 		.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
+		// 		.withClaim(JwtProperties.JWT_CLAIM_ID, principalDetailis.getUser().getId())
+		// 		.withClaim(JwtProperties.JWT_CLAIM_USERNAME, principalDetailis.getUser().getUsername())
+		// 		.sign(Algorithm.HMAC512(JwtProperties.SECRET));
+
+		response.addHeader(tokenProperties.getAccessHeader(), tokenProperties.getAccessPrefix() + accessToken);
+		response.addHeader(tokenProperties.getRefreshHeader(), tokenProperties.getRefreshPrefix() + refreshToken);
 	}
 }

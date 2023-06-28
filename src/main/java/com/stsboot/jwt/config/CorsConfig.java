@@ -1,16 +1,18 @@
 package com.stsboot.jwt.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import com.stsboot.jwt.properties.JwtProperties;
+import com.stsboot.jwt.properties.TokenProperties;
 
 @Configuration
 public class CorsConfig {
+
+	@Autowired
+	TokenProperties tokenProperties;
 
 	@Bean
 	public CorsConfigurationSource corsFilter() {
@@ -22,7 +24,8 @@ public class CorsConfig {
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		config.addAllowedOriginPattern("*");
-		config.addExposedHeader(JwtProperties.HEADER_STRING);
+		config.addExposedHeader(tokenProperties.getAccessHeader());
+		config.addExposedHeader(tokenProperties.getRefreshHeader());
 
 		source.registerCorsConfiguration("/**", config);
 		return source;

@@ -25,6 +25,8 @@ UPDATE user SET roles = 'ROLE_ADMIN', active = TRUE WHERE username = 'song';
 
 DELETE FROM menucategory WHERE categoryid = 4;
 
+USE jwtauth;
+
 
 -- 사용자 권한 --
 INSERT INTO user_role (role, securityrole, roleno) VALUES ('Admin', 'ROLE_ADMIN', 0);
