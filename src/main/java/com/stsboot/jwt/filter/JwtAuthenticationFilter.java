@@ -64,7 +64,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			// 굳이 JWT토큰을 사용하면서 세션을 만들 이유가 없음 . 근데 단지 권한 처리때문에 session에 저장함.
 			return authentication;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
