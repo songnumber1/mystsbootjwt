@@ -75,7 +75,7 @@ public class TokenServiceImpl implements TokenService {
         {
             String secert = tokenProperties.getAccessSecert();
             String claimUserId = tokenProperties.getClaimUserId();
-            String clamiUserName = tokenProperties.getClaimUserName();
+            //String clamiUserName = tokenProperties.getClaimUserName();
             String prefix = tokenProperties.getAccessPrefix();
 
             accessToken = accessToken.replace(prefix, "");
@@ -83,8 +83,8 @@ public class TokenServiceImpl implements TokenService {
             long userId = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(claimUserId)
                     .asLong();
 
-            String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(clamiUserName)
-                    .asString();
+            // String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(clamiUserName)
+            //         .asString();
 
             Optional<User> user = userRepository.findById(userId);
 
@@ -108,7 +108,7 @@ public class TokenServiceImpl implements TokenService {
         {
             String secert = tokenProperties.getRefreshSecert();
             String claimUserId = tokenProperties.getClaimUserId();
-            String clamiUserName = tokenProperties.getClaimUserName();
+            // String clamiUserName = tokenProperties.getClaimUserName();
             String prefix = tokenProperties.getRefreshPrefix();
 
             refreshToken = refreshToken.replace(prefix, "");
@@ -116,8 +116,8 @@ public class TokenServiceImpl implements TokenService {
             long userId = JWT.require(Algorithm.HMAC512(secert)).build().verify(refreshToken).getClaim(claimUserId)
                     .asLong();
 
-            String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(refreshToken).getClaim(clamiUserName)
-                    .asString();
+            // String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(refreshToken).getClaim(clamiUserName)
+            //         .asString();
 
             Optional<User> user = userRepository.findById(userId);
 

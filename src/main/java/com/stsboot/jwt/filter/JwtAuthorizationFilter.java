@@ -24,7 +24,7 @@ import com.stsboot.jwt.service.TokenService;
 // 만약에 권한이 인증이 필요한 주소가 아니라면 이 필터는 호출되지 않음
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
-	private UserRepository userRepository;
+	//private UserRepository userRepository;
 
 	private TokenProperties tokenProperties;
 
@@ -32,9 +32,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 	
 	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, TokenProperties tokenProperties, TokenService tokenService) {
 		super(authenticationManager);
-		// TODO Auto-generated constructor stub
-		
-		this.userRepository = userRepository;
+		//this.userRepository = userRepository;
 		this.tokenProperties = tokenProperties;
 		this.tokenService = tokenService;
 	}
@@ -42,7 +40,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
 		System.out.println("인증이나 권한이 필요한 주소 요청이 됨.");
 
 		// Acccess 토큰을 검증해서 정상적인 사용자 확인
