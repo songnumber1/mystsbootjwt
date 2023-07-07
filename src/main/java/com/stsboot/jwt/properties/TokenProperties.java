@@ -29,7 +29,7 @@ public class TokenProperties {
     @Value("${jwt.access.expired}")
     private long accessExpired;
 
-    @Value("${jwt.refresh.prefix}")
+    @Value("${jwt.access.prefix}")
     private String accessPrefix;
 
     
