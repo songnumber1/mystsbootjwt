@@ -47,4 +47,7 @@ public class TokenProperties {
 
     @Value("${jwt.refresh.prefix}")
     private String refreshPrefix;
+
+    @Value("${uri.anyRequest}")
+	private String anyRequestUri;
 }
