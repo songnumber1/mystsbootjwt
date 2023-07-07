@@ -102,6 +102,12 @@ public class RestApiController {
 	}
 	
 	
+	// 모두 접근 가능
+	@PostMapping("/api/v1/everyone")
+	public @ResponseBody String everyone() {
+		return "everyone";
+	}
+
 	// user, manager, admin 권한만 접근 가능
 	@PostMapping("/api/v1/user")
 	public @ResponseBody String user() {
