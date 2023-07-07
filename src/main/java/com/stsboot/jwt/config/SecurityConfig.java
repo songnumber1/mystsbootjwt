@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private CorsConfig corsConfig;
+	// @Autowired
+	// private CorsConfig corsConfig;
 	
 	@Autowired
 	private final UserRepository userRepository;
@@ -47,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.cors().configurationSource(corsConfig.corsFilter())
+		// .and()
+		// .cors().configurationSource(corsConfig.corsFilter())
 		.and()
 		.formLogin().disable()
 		.httpBasic().disable()
