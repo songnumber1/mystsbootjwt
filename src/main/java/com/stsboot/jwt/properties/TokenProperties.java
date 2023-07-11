@@ -32,6 +32,13 @@ public class TokenProperties {
     @Value("${jwt.access.prefix}")
     private String accessPrefix;
 
+    @Value("${jwt.access.error.expired}")
+    private String accessErrorExpired;
+
+    @Value("${jwt.access.error.empty}")
+    private String accessErrorEmpty;
+
+
     
     @Value("${jwt.refresh.secert}")
     private String refreshSecert;
@@ -48,6 +55,13 @@ public class TokenProperties {
     @Value("${jwt.refresh.prefix}")
     private String refreshPrefix;
 
+    @Value("${jwt.refresh.error.expired}")
+    private String refreshErrorExpired;
+
+    @Value("${jwt.refresh.error.empty}")
+    private String refreshErrorEmpty;
+
+
     @Value("${uri.anyRequest}")
-	private String anyRequestUri;
+    private String anyRequestUri;
 }

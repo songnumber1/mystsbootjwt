@@ -55,12 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.addFilter(new JwtAuthenticationFilter(authenticationManager(), tokenProperties, tokenService)) // AuthenticationManager가 파라메터로 넘겨야 한다.
 		.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, tokenProperties, tokenService)) // AuthenticationManager가 파라메터로 넘겨야 한다.
 		.authorizeRequests()
-		.antMatchers("/api/v1/user/**")
-		.access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-		.antMatchers("/api/v1/manager/**")
-		.access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
-		.antMatchers("/api/v1/admin/**")
-		.access("hasRole('ROLE_ADMIN')")
-		.anyRequest().permitAll();
+			.antMatchers("/api/v1/user/**")
+			.access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+			.antMatchers("/api/v1/manager/**")
+			.access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+			.antMatchers("/api/v1/admin/**")
+			.access("hasRole('ROLE_ADMIN')")
+			.antMatchers(tokenProperties.getAnyRequestUri() + "/**").permitAll()
+			.anyRequest().permitAll();
 	}
 }

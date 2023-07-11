@@ -1,7 +1,10 @@
 package com.stsboot.jwt.filter;
 
-import java.io.Console;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -9,28 +12,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.stsboot.com.util.Util;
 import com.stsboot.jwt.Repository.UserRepository;
 import com.stsboot.jwt.auth.PrincipalDetails;
+import com.stsboot.jwt.model.TokenError;
 import com.stsboot.jwt.model.User;
 import com.stsboot.jwt.properties.TokenProperties;
 import com.stsboot.jwt.service.TokenService;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 // 시큐리티가 Filter를 가지고 있는데 그 중 BasicAuthenticationFilter 라는것이 있음
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 위 필터를 무조건 타게 되어 있음.
 // 만약에 권한이 인증이 필요한 주소가 아니라면 이 필터는 호출되지 않음
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
-
-	//private UserRepository userRepository;
-
-
 
 	@Value("{server.servlet.context-path}")
 	private String contextPath;
@@ -53,29 +54,68 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
 		// Acccess 토큰을 검증해서 정상적인 사용자 확인
 		String accessToken = request.getHeader(tokenProperties.getAccessHeader());
-		
+
 		System.out.println(request.getRequestURI());
 
 		if (request.getRequestURI().contains(tokenProperties.getAnyRequestUri())) {
 			chain.doFilter(request, response);
-		 	return;
+			return;
+		}
+
+		if (accessToken == null || accessToken.equals("null")) {
+			// response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			// response.setContentType("application/json");
+			// chain.doFilter(request, response);
+
+			TokenError tokenError = new TokenError();
+			tokenError.setErrorCode(tokenProperties.getAccessErrorEmpty());
+			tokenError.setErrorMsg(tokenProperties.getAccessErrorEmpty());
+			Map<String, String> extraInfo = new HashMap<String, String>();
+			extraInfo.put("errorcode", "This is extraInfo error");
+			tokenError.setExtraInfo(extraInfo);
+			
+			sendTokenErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), "application/json", tokenError);
+			return;
 		}
 
 		User user = tokenService.verfityAccessToken(accessToken);
 
 		if (user == null) {
 			chain.doFilter(request, response);
-		 	return;
+			return;
 		}
-				
+
 		// 서명이 정상적으로 됨	
 		// Acccess 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
 		PrincipalDetails principalDetails = new PrincipalDetails(user);
-		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null,
+				principalDetails.getAuthorities());
+
 		// 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장.
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+
 		chain.doFilter(request, response);
 	}
+	
+	private void sendTokenErrorResponse(HttpServletResponse response, int httpStatus, String contentType, Object tokenError) {
+		response.setStatus(httpStatus);
+		response.setContentType(contentType);
+
+		PrintWriter out;
+
+		try {
+			out = response.getWriter();
+		} catch (IOException e) {
+			return;
+		}
+
+		try {
+			out.println(Util.ObjectToJson(tokenError));
+		}
+		finally
+		{
+			out.close();
+			out.flush();
+		}		
+	} 
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stsboot.com.response.BaseResponseMessage;
 import com.stsboot.com.response.StatusEnum;
-import com.stsboot.com.util.util;
+import com.stsboot.com.util.Util;
 import com.stsboot.jwt.Repository.UserRepository;
 import com.stsboot.jwt.exception.AccountException;
 import com.stsboot.jwt.exception.AccountExceptionType;
@@ -92,10 +92,10 @@ public class RestApiController {
 
         responseMessage.setStatus(statusEnum);
         
-        if(!util.IsNullEmpty(message))
+        if(!Util.IsNullEmpty(message))
         	responseMessage.setMessage(message);
         
-        if(!util.IsNullEmpty(data))
+        if(!Util.IsNullEmpty(data))
         	responseMessage.setData("Data");
 
         return new ResponseEntity<>(responseMessage, headers, HttpStatus.OK);

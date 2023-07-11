@@ -9,7 +9,9 @@ jwt.access.subject=access_sub
 # 10분
 jwt.access.header=access_token
 jwt.access.expired=600000
-jwt.access.prefix=access_bearer 
+jwt.access.prefix=access_bearer
+jwt.access.error.expired=access_expired 
+jwt.access.error.empty=access_empty
 # ================================================================
 
 # ================================================================
@@ -21,6 +23,8 @@ jwt.refresh.subject=refresh_sub
 jwt.refresh.header=refresh_token
 jwt.refresh.expired=3600000
 jwt.refresh.prefix=refresh_bearer 
+jwt.refresh.error.expired=refresh_expired 
+jwt.refresh.error.empty=refresh_empty
 # ================================================================
 
 uri.anyRequest=/api/v1/everyone
