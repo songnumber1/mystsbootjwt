@@ -67,35 +67,37 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public User verfityAccessToken(String accessToken) {
-        if (accessToken == null) {
-            throw new NullPointerException("AccessToken is null");
-        }
+        String secert = tokenProperties.getAccessSecert();
+        String claimUserId = tokenProperties.getClaimUserId();
+        //String clamiUserName = tokenProperties.getClaimUserName();
+        String prefix = tokenProperties.getAccessPrefix();
+
+        accessToken = accessToken.replace(prefix, "");
+
+        long userId = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(claimUserId)
+                .asLong();
+
+        // String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(clamiUserName)
+        //         .asString();
+
+        Optional<User> user = userRepository.findById(userId);
+
+        return user.get();
+
+        // if (accessToken == null) {
+        //     throw new NullPointerException("AccessToken is null");
+        // }
             
-        try
-        {
-            String secert = tokenProperties.getAccessSecert();
-            String claimUserId = tokenProperties.getClaimUserId();
-            //String clamiUserName = tokenProperties.getClaimUserName();
-            String prefix = tokenProperties.getAccessPrefix();
-
-            accessToken = accessToken.replace(prefix, "");
-
-            long userId = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(claimUserId)
-                    .asLong();
-
-            // String userName = JWT.require(Algorithm.HMAC512(secert)).build().verify(accessToken).getClaim(clamiUserName)
-            //         .asString();
-
-            Optional<User> user = userRepository.findById(userId);
-
-            return user.get();
-        } 
-        catch (TokenExpiredException ex) {
-            throw ex;
-        }
-        catch (Exception ex) {
-            throw ex;
-        }
+        // try
+        // {
+            
+        // } 
+        // catch (TokenExpiredException ex) {
+        //     throw ex;
+        // }
+        // catch (Exception ex) {
+        //     throw ex;
+        // }
     }
 
     @Override

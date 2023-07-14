@@ -10,13 +10,15 @@ import lombok.Getter;
 @Getter
 @PropertySource(value = "classpath:tokenProperty.properies")
 public class TokenProperties {
+
+    // claim
     @Value("${jwt.claim.userid}")
     private String claimUserId;
 
     @Value("${jwt.claim.username}")
     private String claimUserName;
 
-
+    // access Token
     @Value("${jwt.access.secert}")
     private String accessSecert;
 
@@ -32,14 +34,28 @@ public class TokenProperties {
     @Value("${jwt.access.prefix}")
     private String accessPrefix;
 
-    @Value("${jwt.access.error.expired}")
-    private String accessErrorExpired;
+    @Value("${jwt.access.expired.error.code}")
+    private String accessErrorExpiredCode;
 
-    @Value("${jwt.access.error.empty}")
-    private String accessErrorEmpty;
+    @Value("${jwt.access.expired.error.msg}")
+    private String accessErrorExpiredMsg;
+
+    @Value("${jwt.access.empty.error.code}")
+    private String accessErrorEmptyCode;
+
+    @Value("${jwt.access.empty.error.msg}")
+    private String accessErrorEmptyMsg;
+
+    @Value("${jwt.access.verfity.error.code}")
+    private String accessErrorVerfityCode;
+
+    @Value("${jwt.access.verfity.error.msg}")
+    private String accessErrorVerfityMsg;
 
 
-    
+
+
+    // refresh Token
     @Value("${jwt.refresh.secert}")
     private String refreshSecert;
 
@@ -55,11 +71,40 @@ public class TokenProperties {
     @Value("${jwt.refresh.prefix}")
     private String refreshPrefix;
 
-    @Value("${jwt.refresh.error.expired}")
-    private String refreshErrorExpired;
+    @Value("${jwt.refresh.expired.error.code}")
+    private String refreshErrorExpiredCode;
 
-    @Value("${jwt.refresh.error.empty}")
-    private String refreshErrorEmpty;
+    @Value("${jwt.refresh.expired.error.msg}")
+    private String refreshErrorExpiredMsg;
+
+    @Value("${jwt.refresh.empty.error.code}")
+    private String refreshErrorEmptyCode;
+
+    @Value("${jwt.refresh.empty.error.msg}")
+    private String refreshErrorEmptyMsg;
+
+    @Value("${jwt.refresh.verfity.error.code}")
+    private String refreshErrorVerfityCode;
+
+    @Value("${jwt.refresh.verfity.error.msg}")
+    private String refreshErrorVerfityMsg;
+
+
+    @Value("${jwt.refresh.compare.equals.error.code}")
+    private String refreshErrorCompareEqualsCode;
+
+    @Value("${jwt.refresh.compare.equals.error.msg}")
+    private String refreshErrorCompareEqualsMsg;
+
+    
+
+    // common    
+    @Value("${jwt.token.error.code}")
+    private String tokenErrorCode;
+
+    @Value("${jwt.token.error.msg}")
+    private String tokenErrorMsg;
+
 
 
     @Value("${uri.anyRequest}")

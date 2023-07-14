@@ -6,12 +6,21 @@ jwt.claim.username=username
 # "0D17C30D-4971-4969-A221-295DF0771A13" 문자열 base64로 인코딩
 jwt.access.secert=ezBEMTdDMzBELTQ5NzEtNDk2OS1BMjIxLTI5NURGMDc3MUExM30
 jwt.access.subject=access_sub
-# 10분
 jwt.access.header=access_token
-jwt.access.expired=600000
+# 10분
+#jwt.access.expired=600000
+jwt.access.expired=30000
 jwt.access.prefix=access_bearer
-jwt.access.error.expired=access_expired 
-jwt.access.error.empty=access_empty
+
+jwt.access.expired.error.code=300
+jwt.access.expired.error.msg=access_expired
+
+jwt.access.empty.error.code=301
+jwt.access.empty.error.msg=access_empty
+
+jwt.access.verfity.error.code=302
+jwt.access.verfity.error.msg=access_verfity
+
 # ================================================================
 
 # ================================================================
@@ -21,10 +30,26 @@ jwt.refresh.secert=3383DA7E-0E25-4871-9D4A-59EA01AC0A25
 jwt.refresh.subject=refresh_sub
 # 1시간이며 일주일은 604800000이다
 jwt.refresh.header=refresh_token
-jwt.refresh.expired=3600000
+#jwt.refresh.expired=3600000
+jwt.refresh.expired=60000
 jwt.refresh.prefix=refresh_bearer 
-jwt.refresh.error.expired=refresh_expired 
-jwt.refresh.error.empty=refresh_empty
+
+jwt.refresh.expired.error.code=200
+jwt.refresh.expired.error.msg=refresh_expired
+
+jwt.refresh.empty.error.code=201
+jwt.refresh.empty.error.msg=refresh_empty
+
+jwt.refresh.verfity.error.code=202
+jwt.refresh.verfity.error.msg=refresh_verfity
+
+jwt.refresh.compare.equals.error.code=203
+jwt.refresh.compare.equals.error.msg=refresh is not equal
+
 # ================================================================
+# Common
+jwt.token.error.code=100
+jwt.token.error.msg=Token error
+# =================================================================
 
 uri.anyRequest=/api/v1/everyone
