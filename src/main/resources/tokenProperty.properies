@@ -8,8 +8,8 @@ jwt.access.secert=ezBEMTdDMzBELTQ5NzEtNDk2OS1BMjIxLTI5NURGMDc3MUExM30
 jwt.access.subject=access_sub
 jwt.access.header=access_token
 # 10분
-#jwt.access.expired=600000
-jwt.access.expired=30000
+jwt.access.expired=600000
+#jwt.access.expired=30000
 jwt.access.prefix=access_bearer
 
 jwt.access.expired.error.code=300
@@ -30,8 +30,8 @@ jwt.refresh.secert=3383DA7E-0E25-4871-9D4A-59EA01AC0A25
 jwt.refresh.subject=refresh_sub
 # 1시간이며 일주일은 604800000이다
 jwt.refresh.header=refresh_token
-#jwt.refresh.expired=3600000
-jwt.refresh.expired=60000
+jwt.refresh.expired=3600000
+#jwt.refresh.expired=60000
 jwt.refresh.prefix=refresh_bearer 
 
 jwt.refresh.expired.error.code=200
